@@ -1,3 +1,56 @@
+/**
+ * Funcion para convertir un string a un arreglo con operadores y operandos.
+ * Formula = 12+4*(4-5)
+ * Arreglo[0] = 12
+ * Arreglo[1] = +
+ * Arreglo[2] = 4
+ * Arreglo[3] = *
+ * Arreglo[4] = (
+ * Arreglo[5] = 4
+ * Arreglo[6] = -
+ * Arreglo[7] = 5
+ * Arreglo[8] = )
+ * @param formula String con formula 
+ */
+function formulatToArreglo(formula){
+    var banderapunto = false;
+    var arregloformula = formula.split('');
+    if(isNaN(parseFloat(arregloformula[0])) && arregloformula[0] != '-' && arregloformula[0] != '.'){
+        throw "Error de sintaxis en el espacio 1"; 
+    }
+    for(var contador=1;contador<arregloformula.length;contador++){
+        if(!isNaN(parseFloat(arregloformula[contador]))){
+            arregloformula[contador-1] += arregloformula[contador];
+            arregloformula = eliminarEspacio(arregloformula,contador);
+            contador--;
+        }
+        else if(arregloformula[contador] == '.'){
+            if(banderapunto){
+                throw "Error de sintaxis en el espacio " + contador ;
+            }
+            else{
+                arregloformula = eliminarEspacio(arregloformula,contador);
+                contador--;
+                banderapunto = true;
+            }
+        }
+        else{
+            
+            banderapunto = false;
+        }
+    }
+}
+
+function eliminarEspacio(arreglo,espacioeliminar){
+    document.write(arreglo + '<br>');
+    for(var contador = espacioeliminar;contador < arreglo.length - 1;contador++){
+        arreglo[contador] = arreglo[contador + 1];
+    }
+    arreglo.pop();
+    document.write(arreglo + '<br>');
+    return arreglo;
+}
+
 function convPosfija(formula){
     var pila = []; 
     var formulastring = formula.split('');
@@ -16,7 +69,7 @@ function convPosfija(formula){
         else if(!isNaN(parseFloat(simbolo))){
             formulaposfija += simbolo;
         }else{
-            while(pila.length != 0 && pila[pila.length - 1] != '(' &&  comparacionOperadores(simbolo,pila[pila.length - 1]) ){
+            while(pila.length != 0 && pila[pila.length - 1] != '(' &&  comparacionOperadores(simbolo,pila[pila.length - 1])){
                 formulaposfija += pila.pop();
             }
             pila.push(simbolo);
@@ -50,4 +103,4 @@ function comparacionOperadores(simbolo,simapila){
     }
 }
 
-document.onload = convPosfija('(1+2)*3-(4-5)*(6+7)');
+document.onload = formulatToArreglo('1+342+3');
