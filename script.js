@@ -13,13 +13,21 @@
  * @param formula String con formula 
  */
 function formulatToArreglo(formula){
+    document.write("Inicio" + '<br>');
     var banderapunto = false;
+    var banderaoperador = false;
     var arregloformula = formula.split('');
     if(isNaN(parseFloat(arregloformula[0])) && arregloformula[0] != '-' && arregloformula[0] != '.'){
         throw "Error de sintaxis en el espacio 1"; 
     }
     for(var contador=1;contador<arregloformula.length;contador++){
+        document.write("actual: " + arregloformula[contador] + '<br>');
         if(!isNaN(parseFloat(arregloformula[contador]))){
+            document.write("estoy en el numero " + arregloformula[contador] + '<br>');
+            if(banderaoperador){
+                banderaoperador = false;
+                continue;
+            }
             arregloformula[contador-1] += arregloformula[contador];
             arregloformula = eliminarEspacio(arregloformula,contador);
             contador--;
@@ -35,14 +43,18 @@ function formulatToArreglo(formula){
             }
         }
         else{
-            
-            banderapunto = false;
+            if(arregloformula[contador] != ')' && arregloformula[contador] != '('){
+                if(banderaoperador){
+                    throw "Error de sistaxis en el espacio " + contador ;
+                }
+                banderaoperador = true;
+                banderapunto = false;
+            }
         }
     }
 }
 
 function eliminarEspacio(arreglo,espacioeliminar){
-    document.write(arreglo + '<br>');
     for(var contador = espacioeliminar;contador < arreglo.length - 1;contador++){
         arreglo[contador] = arreglo[contador + 1];
     }
@@ -103,4 +115,4 @@ function comparacionOperadores(simbolo,simapila){
     }
 }
 
-document.onload = formulatToArreglo('1+342+3');
+document.onload = convPosfija('1+2*3+4');
