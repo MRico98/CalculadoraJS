@@ -1,55 +1,65 @@
 /**
- * Funcion para convertir un string a un arreglo con operadores y operandos.
- * Formula = 12+4*(4-5)
- * Arreglo[0] = 12
- * Arreglo[1] = +
- * Arreglo[2] = 4
- * Arreglo[3] = *
- * Arreglo[4] = (
- * Arreglo[5] = 4
- * Arreglo[6] = -
- * Arreglo[7] = 5
- * Arreglo[8] = )
- * @param formula String con formula 
+ * Inicio de la calculadora
+ * @param formula String con la formula
  */
-function formulatToArreglo(formula){
-    document.write("Inicio" + '<br>');
-    var banderapunto = false;
-    var banderaoperador = false;
-    var arregloformula = formula.split('');
-    if(isNaN(parseFloat(arregloformula[0])) && arregloformula[0] != '-' && arregloformula[0] != '.'){
-        throw "Error de sintaxis en el espacio 1"; 
+function inicioCalculadora(formula){
+    formula = cadenaToArray(formula);
+    diferenciaOperadoresOperandos(formula);
+    construccioNegativos(formula);
+    comprobacionOperadores(formula);
+    document.write(formula);
+}
+
+/**
+ * Transformacion de cadena a array
+ * ejemplo:
+ * String 1+23
+ * Array[0] = 1, Array[1] = +, Array[2] = 2, Array[3] = 3
+ * @param formula String con la formula
+ */
+function cadenaToArray(formula){
+    return formula.split('');
+}
+
+/**
+ * Se hace la diferenciacion entre operadores y operandos en espacios de memoria
+ * ejemplo:
+ * String = 13+54 -> array[0] = 13, array[1] = +, array[2] = 54
+ * ejemplo2:
+ * String = 3.5+(3-4) -> array[0] = 3.5, array[1] = +, array[2] = (, array[3] = 3, array[4] = -, array[5] = 4, array[6] = )
+ * @param formula 
+ */
+function diferenciaOperadoresOperandos(arregloformula){
+    if(isNaN(parseFloat(arregloformula[0])) && arregloformula[0] != '-' && arregloformula[0] != '.' && arregloformula[0] != '(' && arregloformula[0] != ')'){
+        throw "Error"; 
     }
     for(var contador=1;contador<arregloformula.length;contador++){
-        document.write("actual: " + arregloformula[contador] + '<br>');
-        if(!isNaN(parseFloat(arregloformula[contador]))){
-            document.write("estoy en el numero " + arregloformula[contador] + '<br>');
-            if(banderaoperador){
-                banderaoperador = false;
-                continue;
+        if(!isNaN(parseFloat(arregloformula[contador])) || arregloformula[contador] == '.'){
+            if(!isNaN(parseFloat(arregloformula[contador - 1])) || arregloformula[contador - 1] == '.'){
+                arregloformula[contador-1] += arregloformula[contador];
+                arregloformula = eliminarEspacio(arregloformula,contador);
+                contador--;
             }
+        }
+    }
+}
+
+function construccioNegativos(arregloformula){
+    var banderaoperador = false;
+    for(var contador=0;contador<arregloformula.length;contador++){
+        if(!isNaN(parseFloat(arregloformula[contador])) && arregloformula[contador - 1] == '-' && isNaN(parseFloat(arregloformula[contador - 2])) && arregloformula[contador - 2] != ')'){
             arregloformula[contador-1] += arregloformula[contador];
             arregloformula = eliminarEspacio(arregloformula,contador);
             contador--;
         }
-        else if(arregloformula[contador] == '.'){
-            if(banderapunto){
-                throw "Error de sintaxis en el espacio " + contador ;
-            }
-            else{
-                arregloformula = eliminarEspacio(arregloformula,contador);
-                contador--;
-                banderapunto = true;
-            }
-        }
-        else{
-            if(arregloformula[contador] != ')' && arregloformula[contador] != '('){
-                if(banderaoperador){
-                    throw "Error de sistaxis en el espacio " + contador ;
-                }
-                banderaoperador = true;
-                banderapunto = false;
-            }
+    }
+}
+
+function comprobacionOperadores(arregloformula){
+    for(var contador=0;contador<arregloformula.length;contador++){
+        if(isNaN(parseFloat(arregloformula[contador])) && arregloformula[contador] != ')' && arregloformula[contador] != '(' && isNaN(parseFloat(arregloformula[contador + 1])) && arregloformula[contador + 1] != '('){
+            document.write(arregloformula[contador] + '<br>');
+            document.write("mal escrito <br>");
         }
     }
 }
@@ -59,7 +69,6 @@ function eliminarEspacio(arreglo,espacioeliminar){
         arreglo[contador] = arreglo[contador + 1];
     }
     arreglo.pop();
-    document.write(arreglo + '<br>');
     return arreglo;
 }
 
@@ -90,12 +99,11 @@ function convPosfija(formula){
     while(pila.length != 0){
         formulaposfija += pila.pop();
     }
-    document.writeln(formulaposfija);
 }
 
 function comparacionOperadores(simbolo,simapila){
     if(simbolo == '+' || simbolo == '-'){
-        if(simapila != simbolo){
+        if(simapila != "+" || simapila != '-'){
             return true;
         }
         else{
@@ -103,7 +111,7 @@ function comparacionOperadores(simbolo,simapila){
         }
     }
     else if(simbolo == '*' || simbolo == '/'){
-        if(simapila == '^'){
+        if(simapila != '^'){
             return true;
         }
         else{
@@ -115,4 +123,4 @@ function comparacionOperadores(simbolo,simapila){
     }
 }
 
-document.onload = convPosfija('1+2*3+4');
+document.onload = inicioCalculadora('13-*-.4+(-46*-3)-3*3');
