@@ -7,6 +7,7 @@ function inicioCalculadora(formula){
     diferenciaOperadoresOperandos(formula);
     construccioNegativos(formula);
     comprobacionOperadores(formula);
+    convPosfija(formula);
     document.write(formula);
 }
 
@@ -57,7 +58,7 @@ function construccioNegativos(arregloformula){
 
 function comprobacionOperadores(arregloformula){
     for(var contador=0;contador<arregloformula.length;contador++){
-        if(isNaN(parseFloat(arregloformula[contador])) && arregloformula[contador] != ')' && arregloformula[contador] != '(' && isNaN(parseFloat(arregloformula[contador + 1])) && arregloformula[contador + 1] != '('){
+        if(isNaN(parseFloat(arregloformula[contador])) && arregloformula[contador] != ')' && isNaN(parseFloat(arregloformula[contador + 1])) && arregloformula[contador + 1] != '('){
             document.write(arregloformula[contador] + '<br>');
             document.write("mal escrito <br>");
         }
@@ -72,9 +73,8 @@ function eliminarEspacio(arreglo,espacioeliminar){
     return arreglo;
 }
 
-function convPosfija(formula){
-    var pila = []; 
-    var formulastring = formula.split('');
+function convPosfija(formulastring){
+    var pila = [];
     var formulaposfija = "";
     while(formulastring != ''){
         var simbolo = formulastring.shift();
@@ -99,6 +99,7 @@ function convPosfija(formula){
     while(pila.length != 0){
         formulaposfija += pila.pop();
     }
+    document.write(formulaposfija);
 }
 
 function comparacionOperadores(simbolo,simapila){
@@ -123,4 +124,4 @@ function comparacionOperadores(simbolo,simapila){
     }
 }
 
-document.onload = inicioCalculadora('13-*-.4+(-46*-3)-3*3');
+document.onload = inicioCalculadora('1-2+(3*4)-5*6');
