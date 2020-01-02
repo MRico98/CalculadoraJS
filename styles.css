@@ -1,0 +1,21 @@
+body{
+    margin: 50px 50px 0px 50px;
+}
+
+.contenedorprincipal{
+    padding: 30px 20px 20px 20px;
+    border-radius: 20px 20px 0px 0px;
+    background-color: #326AAE;
+}
+
+.contenedorbotones{
+    border-radius: 0px 0px 5px 5px;
+    background-color: #7FB0F5;
+}
+
+.contenedormarcador{
+    border-color: white;
+    text-align: right;
+    background-color: white;
+    font-family: 'Orbitron', sans-serif;
+}

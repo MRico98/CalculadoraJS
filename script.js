@@ -90,11 +90,21 @@ function convPosfija(formulastring){
         else if(!isNaN(parseFloat(simbolo))){
             formulaposfija += simbolo;
         }else{
-            while(pila.length != 0 && pila[pila.length - 1] != '(' &&  comparacionOperadores(simbolo,pila[pila.length - 1])){
+            if(pila.length != 0 || pila[pila.length - 1] != '('){
+                formulaposfija = comparacionOperadores(formulaposfija,simbolo,pila);
+            }
+            else{
+                pila.push(simbolo);
+            }
+            /*
+            while(pila.length != 0 && pila[pila.length - 1] != '(' && comparacionOperadores(simbolo,pila[pila.length - 1])){
                 formulaposfija += pila.pop();
             }
             pila.push(simbolo);
+            */
+
         }
+        document.write(pila + '<br>');
     }
     while(pila.length != 0){
         formulaposfija += pila.pop();
@@ -102,6 +112,53 @@ function convPosfija(formulastring){
     document.write(formulaposfija);
 }
 
+function comparacionOperadores(formulaposfija,simbolo,pila){
+    if(simbolo == '-' || simbolo == '+'){
+        if(pila[pila.length - 1] == '-' || pila[pila.length - 1] == '+'){
+            var digito = pila.pop();
+            pila.push(simbolo);
+            return formulaposfija += digito;
+        }
+        else{
+            while(pila.length != 0 && pila[pila.length - 1] != '('){
+                formulaposfija += pila.pop();
+            }
+            pila.push(simbolo);
+            return formulaposfija;
+        }
+    }
+    else if(simbolo == '*' || simbolo == '/'){
+        if(pila[pila.length - 1] == '*' || pila[pila.length - 1] == '/'){
+            var digito = pila.pop();
+            pila.push(simbolo);
+            return formulaposfija += digito;
+        }
+        else if(pila[pila.length - 1] == '-' || pila[pila.length - 1] == '+'){
+            pila.push(simbolo);
+            return formulaposfija;
+        }
+        else{
+            while(pila.length != 0 && pila[pila.length - 1] != '('){
+                formulaposfija += pila.pop();
+            }
+            pila.push(simbolo);
+            return formulaposfija;
+        }
+    }
+    else{
+        if(pila[pila.length - 1] == '^'){
+            var digito = pila.pop();
+            pila.push(simbolo);
+            return formulaposfija += digito;
+        }
+        else{
+            pila.push(simbolo);
+            return formulaposfija;
+        }
+    }
+}
+
+/*
 function comparacionOperadores(simbolo,simapila){
     if(simbolo == '+' || simbolo == '-'){
         if(simapila != "+" || simapila != '-'){
@@ -113,15 +170,17 @@ function comparacionOperadores(simbolo,simapila){
     }
     else if(simbolo == '*' || simbolo == '/'){
         if(simapila != '^'){
-            return true;
+            document.write("El simbolo " + simbolo + "tiene mayor presedencia que " + simapila + "<br>" );
+            return false;
         }
         else{
-            return false;
+            return true;
         }
     }
     else{
         return true;
     }
 }
+*/
 
-document.onload = inicioCalculadora('1-2+(3*4)-5*6');
+document.onload = inicioCalculadora('3.3+((4+5)*(6+7)+3)');
