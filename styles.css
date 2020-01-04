@@ -1,16 +1,17 @@
 body{
-    margin: 50px 50px 0px 50px;
+    margin: 50px 400px 0px 400px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(0, 102, 255, 0.336));
 }
 
 .contenedorprincipal{
     padding: 30px 20px 20px 20px;
     border-radius: 20px 20px 0px 0px;
-    background-color: #326AAE;
+    background-color: rgb(43, 103, 177);
 }
 
 .contenedorbotones{
     border-radius: 0px 0px 5px 5px;
-    background-color: #7FB0F5;
+    background-color: rgb(105, 162, 241);
 }
 
 .contenedormarcador{
@@ -18,4 +19,30 @@ body{
     text-align: right;
     background-color: white;
     font-family: 'Orbitron', sans-serif;
+}
+
+@media only screen and (max-width: 1200px) {
+    body {
+      margin: 50px 200px 0px 200px;
+    }
+}
+
+@media only screen and (max-width: 700px){
+    body{ 
+        margin: 50px 100px 0px 100px;
+    }
+}
+
+@media only screen and (max-width: 500px){
+
+    body{
+        margin: 50px 50px 0px 30px;
+    }
+
+}
+
+@media only screen and (max-width: 400px){
+    body{
+        margin: 50px 0px 0px 0px;
+    }
 }
